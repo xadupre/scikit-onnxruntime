@@ -1,0 +1,41 @@
+# Visual Studio Code files
+.vscode
+
+# IPython notebook checkpoints
+.ipynb_checkpoints
+
+# Compiled python
+*.pyc
+
+# setup.py intermediates
+.eggs
+*.egg-info/
+dist/
+build/
+
+# PyCharm files
+.idea
+
+# OSX dir files
+.DS_Store
+
+# Windows
+*.bat
+
+# test generated files
+.pytest_cache
+.cache
+htmlcov
+coverage.xml
+.coverage
+__dump_data/
+junit/
+docs/auto_examples
+docs/examples/graph*.*
+docs/examples/*.onnx
+docs/examples/pipeline*.dot*
+tests/TESTDUMP
+tests/tests_dump
+tests/graph.dot*
+docs/examples/tiny_yolov2*
+docs/examples/imagenet_class_index.json
