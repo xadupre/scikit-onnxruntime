@@ -13,14 +13,12 @@ jobs:
     vmImage: 'Ubuntu-16.04'
   strategy:
     matrix:
-      Python27:
-        python.version: '2.7'
-      Python35:
-        python.version: '3.5'
       Python36:
         python.version: '3.6'
+        onnx.version: 'git'
       Python37:
         python.version: '3.7'
+        onnx.version: 'git'
     maxParallel: 4
 
   steps:
@@ -29,8 +27,35 @@ jobs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
 
-  - script: python -m pip install --upgrade pip && pip install -r requirements.txt
+  - script: python -m pip install --upgrade pip
+    displayName: 'Install pip'
+
+  - script: |
+      test '$(python.version)' == '3.7' && apt-get install protobuf-compiler libprotoc-dev
+      conda config --set always_yes yes --set changeps1 no      
+      conda install -c conda-forge numpy$(numpy.version)
+      conda install protobuf
+      python -m pip install --upgrade pip      
+    displayName: 'Install environment'
+
+  - script: |
+      if [ '$(onnx.version)' == 'git' ]
+        then
+          git clone https://github.com/onnx/onnx.git --recursive
+          export ONNX_ML=1
+          cd onnx
+          python setup.py install
+          cd ..
+        else
+          pip install onnx$(onnx.version)
+      fi
+    displayName: 'install onnx'
+
+  - script: pip install -r requirements.txt
     displayName: 'Install dependencies'
+
+  - script: pip install -r requirements-dev.txt
+    displayName: 'Install dev dependencies'
 
   - script: |
       pip install pytest
@@ -42,17 +67,3 @@ jobs:
       testResultsFiles: '**/test-results.xml'
       testRunTitle: 'Python $(python.version)'
     condition: succeededOrFailed()
-
-- job: 'Publish'
-  dependsOn: 'Test'
-  pool:
-    vmImage: 'Ubuntu-16.04'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
-      architecture: 'x64'
-
-  - script: python setup.py sdist
-    displayName: 'Build sdist'
