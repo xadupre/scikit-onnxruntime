@@ -13,9 +13,6 @@ jobs:
     vmImage: 'Ubuntu-16.04'
   strategy:
     matrix:
-      Python36:
-        python.version: '3.6'
-        onnx.version: 'git'
       Python37:
         python.version: '3.7'
         onnx.version: 'git'
