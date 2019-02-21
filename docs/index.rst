@@ -19,8 +19,6 @@ in `sklearn-learn <https://scikit-learn.org/stable/>`_ pipelines.
     api_summary
     auto_examples/index
 
-**Issues, questions**
-
 You should look for `existing issues <https://github.com/xadupre/scikit-onnxruntime/issues?utf8=%E2%9C%93&q=is%3Aissue>`_
 or submit a new one. Sources are available on
 `xadupre/scikit-onnxruntime <https://github.com/xadupre/scikit-onnxruntime>`_.
