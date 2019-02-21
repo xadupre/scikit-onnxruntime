@@ -1,6 +1,6 @@
 
-scikit-onnxruntime: use onnxruntime in scikit-learn piplines
-============================================================
+scikit-onnxruntime: use onnxruntime in scikit-learn pipelines
+=============================================================
 
 .. list-table:
     :header-rows: 1

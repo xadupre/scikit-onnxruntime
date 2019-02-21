@@ -10,6 +10,16 @@ Introduction
 `onnxruntime <https://github.com/microsoft/onnxruntime>`_
 with `scikit-learn <https://scikit-learn.org/stable/>`_ API.
 
+::
+
+    with open("rf_iris.onnx", "rb") as f:
+        content = f.read()
+
+    ot = OnnxTransformer(content, output_name="output_probability")
+    ot.fit(X_train, y_train)
+
+    print(ot.transform(X_test[:5]))
+
 Documentation
 -------------
 
