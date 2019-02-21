@@ -1,4 +1,4 @@
-.. image:: docs/logo_main.png"
+.. image:: docs/logo_main.png
 
 .. image:: https://dev.azure.com/xadupre/scikit-onnxruntime/_apis/build/status/xadupre.scikit.onnxruntime
     :target: https://dev.azure.com/xadupre/scikit-onnxruntime

@@ -28,7 +28,7 @@ with (open(os.path.join(this, 'skonnxrt/__init__.py'), "r")) as f:
 README = os.path.join(os.getcwd(), "README.md")
 with open(README) as f:
     long_description = f.read()
-    start_pos = long_description.find('## Introduction')
+    start_pos = long_description.find('------------')
     if start_pos >= 0:
         long_description = long_description[start_pos:]
 
@@ -37,7 +37,6 @@ setup(
     version=version_str,
     description="Scikit-learn wrapper of onnxruntime",
     long_description=long_description,
-    long_description_content_type='text/markdown',
     license='MIT License',
     author='Microsoft Corporation',
     author_email='xadupre@microsoft.com',
