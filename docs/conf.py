@@ -8,9 +8,9 @@ import os
 import sys
 import shutil
 import sphinx_gallery.gen_gallery
+import skonnxrt
 import skl2onnx
 import onnxruntime
-import sphinx_skl2onnx_extension
 import sphinx_modern_theme_modified
 
 
@@ -31,9 +31,11 @@ extensions = [
     'sphinx.ext.viewcode',
     "sphinx.ext.autodoc",
     'sphinx.ext.githubpages',
+    "sphinx.ext.napoleon",
     "sphinx_gallery.gen_gallery",
     'sphinx.ext.autodoc',
     "sphinxcontrib.blockdiag",
+    'pyquickhelper.sphinxext.sphinx_epkg_extension',
 ]
 
 templates_path = ['_templates']
@@ -62,6 +64,19 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 sphinx_gallery_conf = {
      'examples_dirs': 'examples',
      'gallery_dirs': 'auto_examples',
+}
+
+# -- shortcuts --
+
+epkg_dictionary = {
+    'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html',
+    'onnx': 'https://github.com/onnx/onnx',
+    'ONNX': 'https://onnx.ai/',
+    'onnxmltools': 'https://github.com/onnx/onnxmltools',
+    'onnxruntime': 'https://xadupre.github.io/onnxruntime/index.html',
+    'scikit-learn': 'https://scikit-learn.org/stable/',
+    'skl2onnx': 'https://github.com/onnx/sklearn-onnx',
+    'sklearn-onnx': 'https://github.com/onnx/sklearn-onnx',
 }
 
 # -- Setup actions -----------------------------------------------------------

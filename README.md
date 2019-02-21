@@ -1,8 +1,6 @@
 <p align="center"><img width="50%" src="docs/logo_main.png" /></p>
 
-| Linux | Windows |
-|-------|---------|
-| [![Build Status](https://dev.azure.com/onnxmltools/sklearn-onnx/_apis/build/status/sklearn-onnx-linux-conda-ci?branchName=master)](https://dev.azure.com/onnxmltools/sklearn-onnx/_build/latest?definitionId=5?branchName=master) | [![Build Status](https://dev.azure.com/onnxmltools/sklearn-onnx/_apis/build/status/sklearn-onnx-win32-conda-ci?branchName=master)](https://dev.azure.com/onnxmltools/sklearn-onnx/_build/latest?definitionId=5?branchName=master)|
+[![Build Status](https://dev.azure.com/xadupre/scikit-onnxruntime/_apis/build/status/xadupre.scikit.onnxruntime)](https://dev.azure.com/xadupre/scikit-onnxruntime/) 
 
 ## Introduction 
 *scikit-onnxruntime* wraps [onnxruntime](https://github.com/microsoft/onnxruntime)

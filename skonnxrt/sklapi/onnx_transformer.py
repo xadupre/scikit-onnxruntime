@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 #--------------------------------------------------------------------------
 """
-Wraps runtime into a *scikit-learn* transformer.
+Wraps runtime into a :epkg:`scikit-learn` transformer.
 """
 import numpy
 import pandas
@@ -12,20 +12,24 @@ from onnxruntime import InferenceSession
 
 class OnnxTransformer(BaseEstimator, TransformerMixin):
     """
-    Calls *onnxruntime* inference following *scikit-learn* API
-    so that it can be included in a *scikit-learn* pipeline.
+    Calls :epkg:`onnxruntime` inference following :epkg:`scikit-learn` API
+    so that it can be included in a :epkg:`scikit-learn` pipeline.
+
+    Parameters
+    ----------
+
+    onnx_bytes : bytes 
+    output_name: string
+        requested output name or None to request all and
+        have method *transform* to store all of them in a dataframe
+    enforce_float32 : boolean
+        :epkg:`onnxruntime` only supports *float32*,
+        :epkg:`scikit-learn` usually uses double floats, this parameter
+        ensures that every array of double floats is converted into
+        single floats
     """
 
     def __init__(self, onnx_bytes, output_name=None, enforce_float32=True):
-        """
-        :param onnx_bytes: bytes 
-        :param output_name: requested output name or None to request all and
-            have method *transform* to store all of them in a dataframe
-        :param enforce_float32: *onnxruntime* only supports *float32*,
-            *scikit-learn* usually uses double floats, this parameter
-            ensures that every array of double floats is converted into
-            single floats
-        """
         BaseEstimator.__init__(self)
         TransformerMixin.__init__(self)
         self.onnx_bytes = onnx_bytes
@@ -36,7 +40,7 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
 
     def fit(self, X=None, y=None, **fit_params):
         """
-        Loads the *ONNX* model.
+        Loads the :epkg:`ONNX` model.
 
         Parameters
         ----------
@@ -76,11 +80,14 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         ----------
         X : iterable, data to process (or first input if several expected)
         y : unused
-        inputs: additional inputs (input number >= 1)
+        inputs: :epkg:`ONNX` graph support multiple inputs,
+            each column of a dataframe is converted into as many inputs if
+            *X* is a dataframe, otherwise, *X* is considered as the first input
+            and *inputs* can be used to specify the other ones
 
         Returns
         -------
-        DataFrame
+        :epkg:`DataFrame`
         """
         if not hasattr(self, "onnxrt_"):
             raise AttributeError("The transform must be fit first.")
@@ -124,10 +131,13 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         ----------
         X : iterable, data to process (or first input if several expected)
         y : unused
-        inputs: additional inputs (input number >= 1)
+        inputs: :epkg:`ONNX` graph support multiple inputs,
+            each column of a dataframe is converted into as many inputs if
+            *X* is a dataframe, otherwise, *X* is considered as the first input
+            and *inputs* can be used to specify the other ones
         
         Returns
         -------
-        DataFrame
+        :epkg:`DataFrame`
         """
         return self.fit(X, y=y, **inputs).transform(X, y)

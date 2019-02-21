@@ -50,7 +50,7 @@ with open("rf_iris.onnx", "wb") as f:
 # Compute ONNX prediction similarly as scikit-learn transformer
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from onnxruntime.sklapi import OnnxTransformer
+from skonnxrt.sklapi import OnnxTransformer
 
 with open("rf_iris.onnx", "rb") as f:
     content = f.read()
@@ -270,7 +270,8 @@ plt.axis('off')
 import numpy, sklearn
 print("numpy:", numpy.__version__)
 print("scikit-learn:", sklearn.__version__)
-import onnx, onnxruntime, skl2onnx, onnxmltools, lightgbm
+import onnx, onnxruntime, skl2onnx, skonnxrt
 print("onnx: ", onnx.__version__)
 print("onnxruntime: ", onnxruntime.__version__)
+print("scikit-onnxruntime: ", skonnxrt.__version__)
 print("skl2onnx: ", skl2onnx.__version__)
