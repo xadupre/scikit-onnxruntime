@@ -16,21 +16,20 @@ jobs:
       Python37:
         python.version: '3.7'
         onnx.version: 'git'
+        skl2onnx.version: 'git'
     maxParallel: 4
 
   steps:
-  - task: UsePythonVersion@0
+  - task: CondaEnvironment@1
     inputs:
-      versionSpec: '$(python.version)'
-      architecture: 'x64'
-
-  - script: python -m pip install --upgrade pip
-    displayName: 'Install pip'
+      createCustomEnvironment: true
+      environmentName: 'py$(python.version)'
+      packageSpecs: 'python=$(python.version)'
 
   - script: |
       test '$(python.version)' == '3.7' && apt-get install protobuf-compiler libprotoc-dev
       conda config --set always_yes yes --set changeps1 no      
-      conda install -c conda-forge numpy$(numpy.version)
+      conda install -c conda-forge numpy
       conda install protobuf
       python -m pip install --upgrade pip      
     displayName: 'Install environment'
@@ -48,6 +47,18 @@ jobs:
       fi
     displayName: 'install onnx'
 
+  - script: |
+      if [ '$(skl2onnx.version)' == 'git' ]
+        then
+          git clone https://github.com/onnx/skl2onnx.git --recursive
+          cd skl2onnx
+          python setup.py install
+          cd ..
+        else
+          pip install skl2onnx$(skl2onnx.version)
+      fi
+    displayName: 'install onnx'
+
   - script: pip install -r requirements.txt
     displayName: 'Install dependencies'
 
@@ -55,7 +66,6 @@ jobs:
     displayName: 'Install dev dependencies'
 
   - script: |
-      pip install pytest
       pytest tests --doctest-modules --junitxml=junit/test-results.xml
     displayName: 'pytest'
 
