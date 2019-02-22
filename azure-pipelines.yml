@@ -65,8 +65,8 @@ jobs:
   - script: |
       if [ '$(skl2onnx.version)' == 'git' ]
         then
-          git clone https://github.com/onnx/skl2onnx.git --recursive
-          cd skl2onnx
+          git clone https://github.com/onnx/sklearn-onnx.git --recursive
+          cd sklearn-onnx
           python setup.py install
           cd ..
         else
