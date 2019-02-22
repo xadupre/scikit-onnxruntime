@@ -1,6 +1,6 @@
 .. image:: docs/logo_main.png
 
-.. image:: https://dev.azure.com/xadupre/scikit-onnxruntime/_apis/build/status/xadupre.scikit.onnxruntime
+.. image:: https://dev.azure.com/xadupre/scikit-onnxruntime/_apis/build/status/xadupre.scikit-onnxruntime?branchName=master
     :target: https://dev.azure.com/xadupre/scikit-onnxruntime
 
 Introduction

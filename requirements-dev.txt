@@ -1,9 +1,4 @@
-numpy
-protobuf
 codecov
-pandas
 pytest
 pytest-cov
-scikit-learn
-scipy
 wheel
