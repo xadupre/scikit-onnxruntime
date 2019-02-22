@@ -1,9 +1,10 @@
-#-------------------------------------------------------------------------
-# Licensed under the MIT License.
-#--------------------------------------------------------------------------
+# coding: utf-8
 """
 Wraps runtime into a :epkg:`scikit-learn` transformer.
 """
+# author: Xavier Dupré
+# license: MIT
+
 import numpy
 import pandas
 from sklearn.base import BaseEstimator, TransformerMixin
