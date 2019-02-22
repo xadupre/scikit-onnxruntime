@@ -57,7 +57,7 @@ jobs:
         else
           pip install skl2onnx$(skl2onnx.version)
       fi
-    displayName: 'install onnx'
+    displayName: 'install skl2onnx'
 
   - script: pip install -r requirements.txt
     displayName: 'Install dependencies'
@@ -67,7 +67,7 @@ jobs:
 
   - script: |
       pip install -e .
-    displayName: 'install'
+    displayName: 'install scikit-onnxruntime'
 
   - script: |
       python -c "import numpy;print('numpy',numpy.__version__)"
@@ -76,7 +76,7 @@ jobs:
       python -c "import numpy;print('onnx',onnx.__version__)"
       python -c "import numpy;print('skl2onnx',skl2onnx.__version__)"
       python -c "import numpy;print('onnxruntime',onnxruntime.__version__)"
-    displayName: 'Install dev dependencies'
+    displayName: 'versions'
 
   - script: |
       pytest tests --doctest-modules --junitxml=junit/test-results.xml
