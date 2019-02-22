@@ -30,7 +30,7 @@ jobs:
       test '$(python.version)' == '3.7' && apt-get install protobuf-compiler libprotoc-dev
       conda config --set always_yes yes --set changeps1 no      
       conda install -c conda-forge numpy
-      conda install protobuf
+      conda install protobuf --no-deps
       python -m pip install --upgrade pip      
     displayName: 'Install environment'
 
@@ -47,6 +47,16 @@ jobs:
       fi
     displayName: 'install onnx'
 
+  - script: pip install -r requirements.txt
+    displayName: 'Install dependencies'
+
+  - script: pip install -r requirements-dev.txt
+    displayName: 'Install dev dependencies'
+
+  - script: |
+      pip install -e .
+    displayName: 'install scikit-onnxruntime'
+
   - script: |
       if [ '$(skl2onnx.version)' == 'git' ]
         then
@@ -58,16 +68,6 @@ jobs:
           pip install skl2onnx$(skl2onnx.version)
       fi
     displayName: 'install skl2onnx'
-
-  - script: pip install -r requirements.txt
-    displayName: 'Install dependencies'
-
-  - script: pip install -r requirements-dev.txt
-    displayName: 'Install dev dependencies'
-
-  - script: |
-      pip install -e .
-    displayName: 'install scikit-onnxruntime'
 
   - script: |
       python -c "import numpy;print('numpy',numpy.__version__)"
