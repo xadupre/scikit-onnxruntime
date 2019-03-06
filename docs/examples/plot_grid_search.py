@@ -19,9 +19,6 @@ Fit all preprocessings and serialize with ONNX
 ++++++++++++++++++++++++++++++++++++++++++++++
 """
 
-import numpy as np
-from numpy.testing import assert_almost_equal
-import pandas
 from sklearn.pipeline import make_pipeline
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -31,8 +28,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 import onnxruntime
-from onnxruntime.capi._pybind_state import onnxruntime_ostream_redirect
-from onnxruntime.datasets import get_example
 from skl2onnx.common.data_types import FloatTensorType
 from skl2onnx import convert_sklearn
 from skonnxrt.sklapi import OnnxTransformer
