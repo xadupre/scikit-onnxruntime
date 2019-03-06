@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 # Licensed under the MIT License. See License.txt in the project root for
 # license information.
-#--------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 from distutils.core import setup
 from setuptools import find_packages
@@ -21,7 +21,7 @@ assert packages
 version_str = '0.2.1'
 with (open(os.path.join(this, 'skonnxrt/__init__.py'), "r")) as f:
     line = [_ for _ in [_.strip("\r\n ")
-                                for _ in f.readlines()] if _.startswith("__version__")]
+                        for _ in f.readlines()] if _.startswith("__version__")]
     if len(line) > 0:
         version_str = line[0].split('=')[1].strip('" ')
 

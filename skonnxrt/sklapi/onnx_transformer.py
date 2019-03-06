@@ -19,7 +19,7 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
     Parameters
     ----------
 
-    onnx_bytes : bytes 
+    onnx_bytes : bytes
     output_name: string
         requested output name or None to request all and
         have method *transform* to store all of them in a dataframe
@@ -37,7 +37,7 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         self.output_name = output_name
         self.enforce_float32 = enforce_float32
         if not isinstance(onnx_bytes, bytes):
-            raise TypeError("onnx_bytes must be bytes to be pickled.")        
+            raise TypeError("onnx_bytes must be bytes to be pickled.")
 
     def fit(self, X=None, y=None, **fit_params):
         """
@@ -68,7 +68,8 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
                     if self.enforce_float32:
                         inputs[k] = v.astype(numpy.float32)
                     else:
-                        raise TypeError("onnxunruntime only supports floats. Input '{0}' should be converted.".format(k))
+                        raise TypeError(
+                            "onnxunruntime only supports floats. Input '{0}' should be converted.".format(k))
 
     def transform(self, X, y=None, **inputs):
         """
@@ -91,7 +92,8 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         :epkg:`DataFrame`
         """
         if not hasattr(self, "onnxrt_"):
-            raise AttributeError("Transform OnnxTransformer must be fit first.")
+            raise AttributeError(
+                "Transform OnnxTransformer must be fit first.")
         rt_inputs = {}
         if isinstance(X, pandas.DataFrame):
             for c in X.columns:
@@ -121,7 +123,8 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
             else:
                 return outputs[0]
         else:
-            names = self.output_name if self.output_name else [o.name for o in self.onnxrt_.get_outputs()]
+            names = self.output_name if self.output_name else [
+                o.name for o in self.onnxrt_.get_outputs()]
             return pandas.DataFrame({k: v for k, v in zip(names, outputs)})
 
     def fit_transform(self, X, y=None, **inputs):
@@ -136,7 +139,7 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
             each column of a dataframe is converted into as many inputs if
             *X* is a dataframe, otherwise, *X* is considered as the first input
             and *inputs* can be used to specify the other ones
-        
+
         Returns
         -------
         :epkg:`DataFrame`

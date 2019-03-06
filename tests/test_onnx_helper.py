@@ -12,15 +12,15 @@ from skl2onnx.helpers.onnx_helper import enumerate_model_node_outputs
 
 
 class TestOnnxHelper(unittest.TestCase):
-    
+
     def get_model(self, model):
         try:
             import onnxruntime
         except ImportError:
             return None
-        
+
         from onnxruntime import InferenceSession
-        
+
         session = InferenceSession(save_onnx_model(model))
         return lambda X: session.run(None, {'input': X})[0]
 
@@ -28,14 +28,15 @@ class TestOnnxHelper(unittest.TestCase):
         model = make_pipeline(StandardScaler(), Binarizer(threshold=0.5))
         X = numpy.array([[0.1, 1.1], [0.2, 2.2]])
         model.fit(X)
-        model_onnx = convert_sklearn(model, 'binarizer', [('input', FloatTensorType([1, 2]))])
+        model_onnx = convert_sklearn(
+            model, 'binarizer', [('input', FloatTensorType([1, 2]))])
         filename = "temp_onnx_helper_load_save.onnx"
         save_onnx_model(model_onnx, filename)
         model = load_onnx_model(filename)
         nodes = list(enumerate_model_node_outputs(model))
         new_model = select_model_inputs_outputs(model, 'variable')
         self.assertTrue(new_model.graph is not None)
-        
+
         tr1 = self.get_model(model)
         tr2 = self.get_model(new_model)
         X = X.astype(numpy.float32)
@@ -43,19 +44,21 @@ class TestOnnxHelper(unittest.TestCase):
         X2 = tr2(X)
         self.assertEqual(X1.shape, (2, 2))
         self.assertEqual(X2.shape, (2, 2))
-        
+
     def test_onnx_helper_load_save_init(self):
-        model =  make_pipeline(Binarizer(), OneHotEncoder(sparse=False), StandardScaler())
+        model = make_pipeline(Binarizer(), OneHotEncoder(
+            sparse=False), StandardScaler())
         X = numpy.array([[0.1, 1.1], [0.2, 2.2], [0.4, 2.2], [0.2, 2.4]])
         model.fit(X)
-        model_onnx = convert_sklearn(model, 'pipe3', [('input', FloatTensorType([1, 2]))])
+        model_onnx = convert_sklearn(
+            model, 'pipe3', [('input', FloatTensorType([1, 2]))])
         filename = "temp_onnx_helper_load_save.onnx"
         save_onnx_model(model_onnx, filename)
         model = load_onnx_model(filename)
         nodes = list(enumerate_model_node_outputs(model))
         new_model = select_model_inputs_outputs(model, 'variable')
         self.assertTrue(new_model.graph is not None)
-        
+
         tr1 = self.get_model(model)
         tr2 = self.get_model(new_model)
         X = X.astype(numpy.float32)
@@ -63,7 +66,7 @@ class TestOnnxHelper(unittest.TestCase):
         X2 = tr2(X)
         self.assertEqual(X1.shape, (4, 2))
         self.assertEqual(X2.shape, (4, 2))
-        
+
 
 if __name__ == "__main__":
     unittest.main()

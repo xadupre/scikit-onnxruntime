@@ -62,8 +62,8 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 # -- Options for Sphinx Gallery ----------------------------------------------
 
 sphinx_gallery_conf = {
-     'examples_dirs': 'examples',
-     'gallery_dirs': 'auto_examples',
+    'examples_dirs': 'examples',
+    'gallery_dirs': 'auto_examples',
 }
 
 # -- shortcuts --
@@ -81,8 +81,8 @@ epkg_dictionary = {
 
 # -- Setup actions -----------------------------------------------------------
 
+
 def setup(app):
     # Placeholder to initialize the folder before
     # generating the documentation.
     return app
-

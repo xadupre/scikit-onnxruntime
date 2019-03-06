@@ -47,7 +47,7 @@ onx_bytes = []
 for model in dec_models:
     model.fit(X_train)
     onx = convert_sklearn(model,
-        initial_types=[('X', FloatTensorType((1, X.shape[1])))])
+                          initial_types=[('X', FloatTensorType((1, X.shape[1])))])
     onx_bytes.append(onx.SerializeToString())
 
 ##############################
@@ -60,14 +60,14 @@ pipe = make_pipeline(OnnxTransformer(onx_bytes[0]),
 ################################
 # Grid Search
 # +++++++++++
-# 
+#
 # The serialized models are now used as a parameter
 # in the grid search.
 
 param_grid = [{'onnxtransformer__onnx_bytes': onx_bytes,
                'logisticregression__penalty': ['l2', 'l1'],
                'logisticregression__solver': ['liblinear', 'saga']
-              }]
+               }]
 
 clf = GridSearchCV(pipe, param_grid, cv=3)
 clf.fit(X_train, y_train)
@@ -81,11 +81,10 @@ print(cl)
 # +++++++++++++++++++
 #
 # We get the best parameters returned by the grid search
-# and we search for it in the list of serialized 
+# and we search for it in the list of serialized
 # preprocessing models.
 # And the winner is...
 
 bp = clf.best_params_
 best_step = onx_bytes.index(bp["onnxtransformer__onnx_bytes"])
 print(dec_models[best_step])
-

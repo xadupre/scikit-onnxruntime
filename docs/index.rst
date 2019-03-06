@@ -4,13 +4,13 @@ scikit-onnxruntime: use onnxruntime in scikit-learn pipelines
 
 .. image:: https://dev.azure.com/xadupre/scikit-onnxruntime/_apis/build/status/xadupre.scikit-onnxruntime?branchName=master
     :target: https://dev.azure.com/xadupre/scikit-onnxruntime/
-	    
+	
 *scikit-onnxruntime* enables you to use `ONNX <https://onnx.ai>`_ file
 in `sklearn-learn <https://scikit-learn.org/stable/>`_ pipelines.
 
 .. toctree::
     :maxdepth: 1
-    
+
     tutorial
     api_summary
     auto_examples/index
@@ -33,5 +33,3 @@ The following example is taken from :ref:`l-example-transfer-learning`.
 **License**
 
 It is licensed with `MIT License <../LICENSE>`_.
-
-

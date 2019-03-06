@@ -13,7 +13,7 @@ from skonnxrt.sklapi import OnnxTransformer
 
 
 class TestInferenceSessionSklearn(unittest.TestCase):
-    
+
     def get_name(self, name):
         return get_example(name)
 
@@ -22,11 +22,11 @@ class TestInferenceSessionSklearn(unittest.TestCase):
         name = self.get_name("mul_1.pb")
         with open(name, "rb") as f:
             content = f.read()
-            
+
         tr = OnnxTransformer(content)
         tr.fit()
         res = tr.transform(x)
-        exp = np.array([[ 1.,  4.], [ 9., 16.], [25., 36.]], dtype=np.float32)
+        exp = np.array([[1., 4.], [9., 16.], [25., 36.]], dtype=np.float32)
         self.assertEqual(list(res.ravel()), list(exp.ravel()))
 
     def test_transform_list(self):
@@ -34,11 +34,11 @@ class TestInferenceSessionSklearn(unittest.TestCase):
         name = self.get_name("mul_1.pb")
         with open(name, "rb") as f:
             content = f.read()
-            
+
         tr = OnnxTransformer(content)
         tr.fit()
         res = tr.transform(x)
-        exp = np.array([[ 1.,  4.], [ 9., 16.], [25., 36.]], dtype=np.float32)
+        exp = np.array([[1., 4.], [9., 16.], [25., 36.]], dtype=np.float32)
         self.assertEqual(list(res.ravel()), list(exp.ravel()))
 
     def test_transform_dict(self):
@@ -46,11 +46,11 @@ class TestInferenceSessionSklearn(unittest.TestCase):
         name = self.get_name("mul_1.pb")
         with open(name, "rb") as f:
             content = f.read()
-            
+
         tr = OnnxTransformer(content)
         tr.fit()
         res = tr.transform(x)
-        exp = np.array([[ 1.,  4.], [ 9., 16.], [25., 36.]], dtype=np.float32)
+        exp = np.array([[1., 4.], [9., 16.], [25., 36.]], dtype=np.float32)
         self.assertEqual(list(res.ravel()), list(exp.ravel()))
 
     def test_transform_dataframe(self):
@@ -59,7 +59,7 @@ class TestInferenceSessionSklearn(unittest.TestCase):
         name = self.get_name("mul_1.pb")
         with open(name, "rb") as f:
             content = f.read()
-            
+
         tr = OnnxTransformer(content)
         tr.fit()
         try:
@@ -67,6 +67,6 @@ class TestInferenceSessionSklearn(unittest.TestCase):
         except RuntimeError:
             pass
 
-        
+
 if __name__ == '__main__':
     unittest.main()
