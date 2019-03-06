@@ -91,7 +91,7 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         :epkg:`DataFrame`
         """
         if not hasattr(self, "onnxrt_"):
-            raise AttributeError("The transform must be fit first.")
+            raise AttributeError("Transform OnnxTransformer must be fit first.")
         rt_inputs = {}
         if isinstance(X, pandas.DataFrame):
             for c in X.columns:
