@@ -152,7 +152,7 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         """
         Creates multiple *OnnxTransformer*,
         one for each requested intermediate node.
-        
+
         onnx_bytes : bytes
         output_names: string
             requested output names or None to request all and
