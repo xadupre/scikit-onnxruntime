@@ -9,6 +9,7 @@ import numpy
 import pandas
 from sklearn.base import BaseEstimator, TransformerMixin
 from onnxruntime import InferenceSession
+from ..helpers.onnx_helper import load_onnx_model, enumerate_model_node_outputs, select_model_inputs_outputs
 
 
 class OnnxTransformer(BaseEstimator, TransformerMixin):
@@ -145,3 +146,29 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         :epkg:`DataFrame`
         """
         return self.fit(X, y=y, **inputs).transform(X, y)
+
+    @staticmethod
+    def enumerate_create(onnx_bytes, output_names=None, enforce_float32=True):
+        """
+        Creates multiple *OnnxTransformer*,
+        one for each requested intermediate node.
+        
+        onnx_bytes : bytes
+        output_names: string
+            requested output names or None to request all and
+            have method *transform* to store all of them in a dataframe
+        enforce_float32 : boolean
+            :epkg:`onnxruntime` only supports *float32*,
+            :epkg:`scikit-learn` usually uses double floats, this parameter
+            ensures that every array of double floats is converted into
+            single floats
+        :return: iterator on OnnxTransformer *('output name', OnnxTransformer)*
+        """
+        selected = None if output_names is None else set(output_names)
+        model = load_onnx_model(onnx_bytes)
+        for out in enumerate_model_node_outputs(model):
+            m = select_model_inputs_outputs(model, out)
+            if selected is None or out in selected:
+                tr = OnnxTransformer(m.SerializeToString(),
+                                     enforce_float32=enforce_float32)
+                yield out, tr

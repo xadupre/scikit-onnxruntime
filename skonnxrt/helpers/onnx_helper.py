@@ -48,7 +48,7 @@ def save_onnx_model(model, filename=None):
 
 def enumerate_model_node_outputs(model):
     """
-    Enumerates all the node of a model.
+    Enumerates all the outputs of the nodes of a model.
     """
     if not hasattr(model, "graph"):
         raise TypeError(
@@ -92,6 +92,7 @@ def select_model_inputs_outputs(model, outputs=None, inputs=None):
         mark_op[node.name] = 0
 
     # We mark all the nodes we need to keep.
+    mark_init = {}
     nb = 1
     while nb > 0:
         nb = 0
@@ -109,9 +110,13 @@ def select_model_inputs_outputs(model, outputs=None, inputs=None):
 
             nb += 1
             for inp in node.input:
-                if mark_var[inp] == 1:
-                    continue
-                mark_var[inp] = 1
+                if inp not in mark_var:
+                    # Initializer.
+                    mark_init[inp] = 1
+                else:
+                    if mark_var[inp] == 1:
+                        continue
+                    mark_var[inp] = 1
                 nb += 1
 
     # All nodes verifies mark_op[node.name] == 1
