@@ -40,3 +40,5 @@ tests/graph.dot*
 docs/examples/tiny_yolov2*
 docs/examples/imagenet_class_index.json
 tests/temp_onnx_helper_load_save.onnx
+docs/examples/*.dot
+docs/examples/*.png
