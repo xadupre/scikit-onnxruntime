@@ -2,19 +2,15 @@
 
 # -*- coding: UTF-8 -*-
 import unittest
-import os
-import sys
 import numpy as np
 import pandas
 from sklearn.pipeline import make_pipeline
 from sklearn.decomposition import PCA
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LogisticRegression
-import onnxruntime
-from onnxruntime.capi._pybind_state import onnxruntime_ostream_redirect
-from onnxruntime.datasets import get_example
 from skl2onnx.common.data_types import FloatTensorType
 from skl2onnx import convert_sklearn
+from onnxruntime.datasets import get_example
 from skonnxrt.sklapi import OnnxTransformer
 
 

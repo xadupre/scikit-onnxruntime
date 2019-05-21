@@ -4,13 +4,7 @@
 #
 # Configuration file for the Sphinx documentation builder.
 
-import os
-import sys
-import shutil
-import sphinx_gallery.gen_gallery
 import skonnxrt
-import skl2onnx
-import onnxruntime
 import sphinx_readable_theme
 
 
@@ -69,7 +63,8 @@ sphinx_gallery_conf = {
 # -- shortcuts --
 
 epkg_dictionary = {
-    'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html',
+    'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/'
+                    'reference/api/pandas.DataFrame.html',
     'onnx': 'https://github.com/onnx/onnx',
     'ONNX': 'https://onnx.ai/',
     'onnxmltools': 'https://github.com/onnx/onnxmltools',

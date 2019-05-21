@@ -1,2 +1,2 @@
 
-from .onnx_transformer import OnnxTransformer
+from .onnx_transformer import OnnxTransformer  # noqa

@@ -2,11 +2,7 @@
 
 # -*- coding: UTF-8 -*-
 import unittest
-import os
-import sys
-import numpy as np
 from numpy.testing import assert_almost_equal
-import pandas
 from sklearn.pipeline import make_pipeline
 from sklearn.decomposition import PCA
 from sklearn.datasets import load_iris
@@ -14,9 +10,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
-import onnxruntime
-from onnxruntime.capi._pybind_state import onnxruntime_ostream_redirect
-from onnxruntime.datasets import get_example
 from skl2onnx.common.data_types import FloatTensorType
 from skl2onnx import convert_sklearn
 from skonnxrt.sklapi import OnnxTransformer
@@ -55,9 +48,9 @@ class TestInferenceSessionSklearnGridSearch(unittest.TestCase):
         onx_bytes = onx.SerializeToString()
         tr = OnnxTransformer(onx_bytes)
 
-        pipe = make_pipeline(tr, LogisticRegression())
+        pipe = make_pipeline(tr, LogisticRegression(solver='liblinear'))
 
-        param_grid = [{'logisticregression__penalty': ['l1', 'l2']}]
+        param_grid = [{'logisticregression__penalty': ['l2', 'l1']}]
 
         clf = GridSearchCV(pipe, param_grid, cv=3)
         clf.fit(X_train, y_train)

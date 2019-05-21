@@ -27,7 +27,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
-import onnxruntime
 from skl2onnx.common.data_types import FloatTensorType
 from skl2onnx import convert_sklearn
 from skonnxrt.sklapi import OnnxTransformer
@@ -47,7 +46,8 @@ onx_bytes = []
 for model in dec_models:
     model.fit(X_train)
     onx = convert_sklearn(model,
-                          initial_types=[('X', FloatTensorType((1, X.shape[1])))])
+                          initial_types=[('X',
+                                          FloatTensorType((1, X.shape[1])))])
     onx_bytes.append(onx.SerializeToString())
 
 ##############################
@@ -55,7 +55,7 @@ for model in dec_models:
 # +++++++++++++++++++++++++++++++
 
 pipe = make_pipeline(OnnxTransformer(onx_bytes[0]),
-                     LogisticRegression())
+                     LogisticRegression(multi_class='ovr'))
 
 ################################
 # Grid Search

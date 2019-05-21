@@ -127,8 +127,8 @@ def select_model_inputs_outputs(model, outputs=None, inputs=None):
         value_info = helper.ValueInfoProto()
         value_info.name = out
         var_out.append(value_info)
-    graph = helper.make_graph(keep_nodes, model.graph.name, model.graph.input, var_out,
-                              model.graph.initializer)
+    graph = helper.make_graph(keep_nodes, model.graph.name, model.graph.input,
+                              var_out, model.graph.initializer)
     onnx_model = helper.make_model(graph)
     onnx_model.ir_version = model.ir_version
     onnx_model.producer_name = model.producer_name

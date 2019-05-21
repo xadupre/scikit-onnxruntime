@@ -9,7 +9,8 @@ import numpy
 import pandas
 from sklearn.base import BaseEstimator, TransformerMixin
 from onnxruntime import InferenceSession
-from ..helpers.onnx_helper import load_onnx_model, enumerate_model_node_outputs, select_model_inputs_outputs
+from ..helpers.onnx_helper import load_onnx_model, enumerate_model_node_outputs
+from ..helpers.onnx_helper import select_model_inputs_outputs
 
 
 class OnnxTransformer(BaseEstimator, TransformerMixin):
@@ -70,7 +71,8 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
                         inputs[k] = v.astype(numpy.float32)
                     else:
                         raise TypeError(
-                            "onnxunruntime only supports floats. Input '{0}' should be converted.".format(k))
+                            "onnxunruntime only supports floats. Input '{0}' "
+                            "should be converted.".format(k))
 
     def transform(self, X, y=None, **inputs):
         """

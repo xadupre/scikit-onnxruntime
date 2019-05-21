@@ -38,8 +38,8 @@ print(clr)
 # Convert a model into ONNX
 # +++++++++++++++++++++++++
 
-from skl2onnx import convert_sklearn
-from skl2onnx.common.data_types import FloatTensorType
+from skl2onnx import convert_sklearn  # noqa
+from skl2onnx.common.data_types import FloatTensorType  # noqa
 initial_type = [('float_input', FloatTensorType([1, 4]))]
 onx = convert_sklearn(clr, initial_types=initial_type)
 
@@ -50,7 +50,7 @@ with open("rf_iris.onnx", "wb") as f:
 # Compute ONNX prediction similarly as scikit-learn transformer
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-from skonnxrt.sklapi import OnnxTransformer
+from skonnxrt.sklapi import OnnxTransformer  # noqa
 
 with open("rf_iris.onnx", "rb") as f:
     content = f.read()
@@ -74,12 +74,13 @@ print(ot.transform(X_test[:5]))
 # a backend into a *scikit-learn*
 # transformers which *onnxruntime* does.
 
-import os
+import os  # noqa
 model_file = "mobilenetv2-1.0.onnx"
 if not os.path.exists(model_file):
     print("Download '{0}'...".format(model_file))
     import urllib.request
-    url = "https://s3.amazonaws.com/onnx-model-zoo/mobilenet/mobilenetv2-1.0/mobilenetv2-1.0.onnx"
+    url = "https://s3.amazonaws.com/onnx-model-zoo/mobilenet/mobilenetv2-1.0/"
+          "mobilenetv2-1.0.onnx"  # noqa
     urllib.request.urlretrieve(url, model_file)
     print("Done.")
 
@@ -87,11 +88,12 @@ class_names = "imagenet_class_index.json"
 if not os.path.exists(class_names):
     print("Download '{0}'...".format(class_names))
     import urllib.request
-    url = "https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json"
+    url = "https://s3.amazonaws.com/deep-learning-models/image-models/"
+          "imagenet_class_index.json"  # noqa
     urllib.request.urlretrieve(url, class_names)
     print("Done.")
 
-import json
+import json  # noqa
 with open(class_names, "r", encoding="utf-8") as f:
     content_classes = f.read()
 labels = json.loads(content_classes)
@@ -99,9 +101,9 @@ labels = json.loads(content_classes)
 #####################################
 # Let's consider one image form *wikipedia*.
 
-from PIL import Image, ImageDraw
-import matplotlib.pyplot as plt
-import numpy
+from PIL import Image, ImageDraw  # noqa
+import matplotlib.pyplot as plt  # noqa
+import numpy  # noqa
 
 img = Image.open('daisy_wikipedia.jpg')
 plt.imshow(img)
@@ -127,13 +129,13 @@ print(pred.shape)
 #############################
 # And the best classes are...
 
-from heapq import nlargest
+from heapq import nlargest  # noqa
 results = nlargest(10, range(pred.shape[0]), pred.take)
 print(results)
 
-import pandas
-data = [{"index": i, "label": labels.get(str(i), ('?', '?'))[1], 'score': pred[i]}
-        for i in results]
+import pandas  # noqa
+data = [{"index": i, "label": labels.get(str(i), ('?', '?'))[1],
+         'score': pred[i]} for i in results]
 df = pandas.DataFrame(data)
 print(df)
 
@@ -149,12 +151,13 @@ print(df)
 # One of the models is available in
 # `ONNX zoo <https://github.com/onnx/models>`_.
 
-import os
+import os  # noqa
 filename = "tiny_yolov2.tar.gz"
 if not os.path.exists(filename):
     print("Download '{0}'...".format(filename))
     import urllib.request
-    url = "https://onnxzoo.blob.core.windows.net/models/opset_8/tiny_yolov2/tiny_yolov2.tar.gz"
+    url = "https://onnxzoo.blob.core.windows.net/models/opset_8/tiny_yolov2/"
+          "tiny_yolov2.tar.gz"  # noqa
     urllib.request.urlretrieve(url, filename)
     print("Done.")
 
@@ -169,9 +172,7 @@ if not os.path.exists(model_file):
 # "
 # Let's retrieve an image.
 
-from PIL import Image, ImageDraw
-import matplotlib.pyplot as plt
-import numpy
+from PIL import Image  # noqa
 
 img = Image.open('Au-Salon-de-l-agriculture-la-campagne-recrute.jpg')
 plt.imshow(img)
@@ -216,15 +217,12 @@ def display_yolo(img, out, threshold):
         scoreMatExp = np.exp(np.asarray(x))
         return scoreMatExp / scoreMatExp.sum(0)
 
-    clut = [(0, 0, 0), (255, 0, 0), (255, 0, 255), (0, 0, 255), (0, 255, 0), (0, 255, 128),
-            (128, 255, 0), (128, 128, 0), (0, 128, 255), (128, 0, 128),
-            (255, 0, 128), (128, 0, 255), (255, 128,
-                                           128), (128, 255, 128), (255, 255, 0),
-            (255, 128, 128), (128, 128, 255), (255, 128, 128), (128, 255, 128), (128, 255, 128)]
-    label = ["aeroplane", "bicycle", "bird", "boat", "bottle",
-             "bus", "car", "cat", "chair", "cow", "diningtable",
-             "dog", "horse", "motorbike", "person", "pottedplant",
-             "sheep", "sofa", "train", "tvmonitor"]
+    clut = [(0, 0, 0), (255, 0, 0), (255, 0, 255), (0, 0, 255), (0, 255, 0),
+            (0, 255, 128), (128, 255, 0), (128, 128, 0), (0, 128, 255),
+            (128, 0, 128), (255, 0, 128), (128, 0, 255), (255, 128, 128),
+            (128, 255, 128), (255, 255, 0),
+            (255, 128, 128), (128, 128, 255), (255, 128, 128),
+            (128, 255, 128), (128, 255, 128)]
 
     draw = ImageDraw.Draw(img)
     for cy in range(0, 13):
@@ -270,14 +268,10 @@ plt.axis('off')
 #################################
 # **Versions used for this example**
 
-import numpy
-import sklearn
+import numpy, sklearn  # noqa
 print("numpy:", numpy.__version__)
 print("scikit-learn:", sklearn.__version__)
-import onnx
-import onnxruntime
-import skl2onnx
-import skonnxrt
+import onnx, onnxruntime, skl2onnx, skonnxrt  # noqa
 print("onnx: ", onnx.__version__)
 print("onnxruntime: ", onnxruntime.__version__)
 print("scikit-onnxruntime: ", skonnxrt.__version__)

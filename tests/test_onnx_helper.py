@@ -7,7 +7,8 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Binarizer, StandardScaler, OneHotEncoder
 from skl2onnx import convert_sklearn
 from skl2onnx.common.data_types import FloatTensorType
-from skl2onnx.helpers.onnx_helper import load_onnx_model, save_onnx_model, select_model_inputs_outputs
+from skl2onnx.helpers.onnx_helper import load_onnx_model, save_onnx_model
+from skl2onnx.helpers.onnx_helper import select_model_inputs_outputs
 from skl2onnx.helpers.onnx_helper import enumerate_model_node_outputs
 
 
@@ -16,6 +17,7 @@ class TestOnnxHelper(unittest.TestCase):
     def get_model(self, model):
         try:
             import onnxruntime
+            assert onnxruntime is not None
         except ImportError:
             return None
 
@@ -33,7 +35,7 @@ class TestOnnxHelper(unittest.TestCase):
         filename = "temp_onnx_helper_load_save.onnx"
         save_onnx_model(model_onnx, filename)
         model = load_onnx_model(filename)
-        nodes = list(enumerate_model_node_outputs(model))
+        list(enumerate_model_node_outputs(model))
         new_model = select_model_inputs_outputs(model, 'variable')
         self.assertTrue(new_model.graph is not None)
 
@@ -55,7 +57,7 @@ class TestOnnxHelper(unittest.TestCase):
         filename = "temp_onnx_helper_load_save.onnx"
         save_onnx_model(model_onnx, filename)
         model = load_onnx_model(filename)
-        nodes = list(enumerate_model_node_outputs(model))
+        list(enumerate_model_node_outputs(model))
         new_model = select_model_inputs_outputs(model, 'variable')
         self.assertTrue(new_model.graph is not None)
 
