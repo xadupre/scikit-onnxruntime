@@ -7,13 +7,16 @@ Wraps runtime into a :epkg:`scikit-learn` transformer.
 
 import numpy
 import pandas
+from onnx import helper
 from sklearn.base import BaseEstimator, TransformerMixin
+from skl2onnx.algebra.onnx_operator_mixin import OnnxOperatorMixin
+from skl2onnx.proto import TensorProto
+from skl2onnx.helpers.onnx_helper import load_onnx_model, enumerate_model_node_outputs
+from skl2onnx.helpers.onnx_helper import select_model_inputs_outputs
 from onnxruntime import InferenceSession
-from ..helpers.onnx_helper import load_onnx_model, enumerate_model_node_outputs
-from ..helpers.onnx_helper import select_model_inputs_outputs
 
 
-class OnnxTransformer(BaseEstimator, TransformerMixin):
+class OnnxTransformer(BaseEstimator, TransformerMixin, OnnxOperatorMixin):
     """
     Calls :epkg:`onnxruntime` inference following :epkg:`scikit-learn` API
     so that it can be included in a :epkg:`scikit-learn` pipeline.
@@ -40,6 +43,16 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
         self.enforce_float32 = enforce_float32
         if not isinstance(onnx_bytes, bytes):
             raise TypeError("onnx_bytes must be bytes to be pickled.")
+
+    def __repr__(self):
+        """
+        usual
+        """
+        ob = self.onnx_bytes
+        if len(ob) > 20:
+            ob = ob[:10] + b"..." + ob[-10:]
+        return "{0}(onnx_bytes=b'{1}', output_name={2}, enforce_float32={3})".format(
+            self.__class__.__name__, ob, self.output_name, enforce_float32)
 
     def fit(self, X=None, y=None, **fit_params):
         """
@@ -174,3 +187,85 @@ class OnnxTransformer(BaseEstimator, TransformerMixin):
                 tr = OnnxTransformer(m.SerializeToString(),
                                      enforce_float32=enforce_float32)
                 yield out, tr
+
+    def onnx_parser(self, inputs=None):
+        """
+        Returns a parser for this model.
+        """
+        if inputs:
+            self.parsed_inputs_ = inputs
+
+        def parser():
+            return [o.name for o in self.onnxrt_.get_outputs()]
+        return parser
+
+    def onnx_shape_calculator(self):
+        def shape_calculator(operator):
+            cout = self.onnxrt_.get_outputs()
+            if len(operator.outputs) != len(cout):
+                raise RuntimeError("Mismatched number of outputs: {} != {}."
+                                   "".format(len(operator.outputs), len(cout)))
+            for out in operator.outputs:
+                shape = out.type.shape
+                typ = guess_type(out.type)
+                out.type = typ(shape=shape)
+        return shape_calculator
+
+
+    def onnx_converter(self):
+        """
+        Returns a converter for this model.
+        If not overloaded, it fetches the converter
+        mapped to the first *scikit-learn* parent
+        it can find.
+        """
+        inputs = getattr(self, "parsed_inputs_", None)
+        
+        if inputs is None:
+            inputs = []
+            for inp in self.onnxrt_.get_inputs():
+                shape = inp.type.shape
+                typ = guess_type(inp.type)
+                inputs.append((inp.name, typ(shape)))
+        if outputs is None:
+            outputs = [out.name for out in self.onnxrt_.get_outputs()]        
+    
+        def copy_inout(inout):
+            shape = [s.dim_value for s in inout.type.tensor_type.shape.dim]
+            value_info = helper.make_tensor_value_info(
+                clean_name(inout.name),
+                inout.type.tensor_type.elem_type,
+                shape)
+            return value_info
+        
+        def clean_variable_name(name, scope):
+            return scope.get_unique_variable_name(naame)
+
+        def clean_operator_name(name, scope):
+            return scope.get_unique_operator_name(naame)
+
+        def clean_initializer_name(name, scope):
+            return scope.get_unique_variable_name(naame)
+
+        def converter(scope, operator, container):
+
+            graph = model_onnx.graph
+            inputs = [copy_inout(o) for o in graph.input]
+            outputs = [copy_inout(o) for o in graph.output]
+            for node in graph.node:
+                n = helper.make_node(node.op_type,
+                                     [clean_variable_name(o) for o in node.input],
+                                     [clean_variable_name(o) for o in node.output])
+                n.attribute.extend(node.attribute)  # pylint: disable=E1101
+                container.nodes.append(n)
+
+            inits = []
+            for o in graph.initializer:
+                tensor = TensorProto()
+                tensor.data_type = o.data_type
+                tensor.name = clean_initializer_name(o.name)
+                tensor.raw_data = o.raw_data
+                tensor.dims.extend(o.dims)  # pylint: disable=E1101
+                container.initializers.append(tensor)
+
+        return converter
