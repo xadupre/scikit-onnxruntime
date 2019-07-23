@@ -6,11 +6,12 @@
 Grid search ONNX models
 =======================
 
-This example uses *OnnxTransformer* to freeze a model.
-Many preprocessing are fitted, converted into *ONNX*
-and inserted into a pipeline with *OnnxTransformer*
-si that they do not have to be fitted again.
-The grid search will pick the best one for the task.
+This example uses *OnnxTransformer* to freeze a model. We first fit a few
+preprocessing models, convert them into an *ONNX* model, and then use them as
+the parameter to the ``OnnxTransformer``. As a result, they are not fit again
+during the ``pipeline.fit``, and are only used as a frozen model.
+The pipeline is then put into a ``GridSearchCV``, and the frozen models are
+the hyperparameters.
 
 .. contents::
     :local:
@@ -27,12 +28,15 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
+
+# slk2onnx is used to convert a sklearn model into ONNX format
 from skl2onnx.common.data_types import FloatTensorType
 from skl2onnx import convert_sklearn
+
+# skonnxrt provides OnnxTransformer which serves the model converted to ONNX
 from skonnxrt.sklapi import OnnxTransformer
 
-iris = load_iris()
-X, y = iris.data, iris.target
+X, y = load_iris(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(X, y)
 
 dec_models = [
@@ -69,7 +73,7 @@ param_grid = [{'onnxtransformer__onnx_bytes': onx_bytes,
                'logisticregression__solver': ['liblinear', 'saga']
                }]
 
-clf = GridSearchCV(pipe, param_grid, cv=3)
+clf = GridSearchCV(pipe, param_grid, cv=5)
 clf.fit(X_train, y_train)
 
 y_true, y_pred = y_test, clf.predict(X_test)
